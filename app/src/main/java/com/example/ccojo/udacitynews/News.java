@@ -4,7 +4,7 @@ package com.example.ccojo.udacitynews;
  * Created by ccojo on 5/23/2018.
  */
 
-public class News {
+class News {
     private String webTitle;
     private String sectionName;
     private String webPublicationDate;
@@ -13,7 +13,7 @@ public class News {
     private String byline;
     private String bodyText;
 
-    public News(String webTitle, String sectionName, String webPublicationDate, String webUrl, String thumbnailUrl, String byline, String bodyText) {
+    News(String webTitle, String sectionName, String webPublicationDate, String webUrl, String thumbnailUrl, String byline, String bodyText) {
         this.webTitle = webTitle;
         this.sectionName = sectionName;
         this.webPublicationDate = webPublicationDate;
@@ -23,31 +23,31 @@ public class News {
         this.bodyText = bodyText;
     }
 
-    public String getWebTitle() {
+    String getWebTitle() {
         return webTitle;
     }
 
-    public String getSectionName() {
+    String getSectionName() {
         return sectionName;
     }
 
-    public String getWebPublicationDate() {
+    String getWebPublicationDate() {
         return webPublicationDate;
     }
 
-    public String getWebUrl() {
+    String getWebUrl() {
         return webUrl;
     }
 
-    public String getThumbnailUrl() {
+    String getThumbnailUrl() {
         return thumbnailUrl;
     }
 
-    public String getByline() {
+    String getByline() {
         return byline;
     }
 
-    public String getBodyText() {
+    String getBodyText() {
         return bodyText;
     }
 }

@@ -22,6 +22,7 @@ import android.widget.Toast;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created by ccojo on 5/23/2018.
@@ -50,6 +51,8 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
     //default page size
     private static int pageSize = 25;
     private static String queryUrl;
+
+    private ConnectivityManager cm;
 
     /**
      * Constant value for the news loader ID.
@@ -86,11 +89,8 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
         // Find a reference to the {@link ListView} in the layout
         ListView newsListView = findViewById(R.id.list);
 
-        /** Set the empty state TextView onto the ListView */
+        // Set the empty state TextView onto the ListView
         emptyView = findViewById(R.id.empty_list_view);
-        swipeRefreshEmpty = findViewById(R.id.swiperefresh_empty);
-        swipeRefreshList = findViewById(R.id.swiperefresh_listview);
-
         newsListView.setEmptyView(swipeRefreshEmpty);
 
         // Create a new {@link ArrayAdapter} of news
@@ -111,11 +111,13 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
         });
 
         //call the swipe refresh methods
+        swipeRefreshEmpty = findViewById(R.id.swiperefresh_empty);
+        swipeRefreshList = findViewById(R.id.swiperefresh_listview);
         onCreateSwipeToRefresh(swipeRefreshList);
         onCreateSwipeToRefresh(swipeRefreshEmpty);
 
         //Connection stuff following
-        ConnectivityManager cm = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        cm = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
 
@@ -146,7 +148,7 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public void onRefresh() {
-        ConnectivityManager cm = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        cm = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
         boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
 

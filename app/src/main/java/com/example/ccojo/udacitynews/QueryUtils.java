@@ -35,7 +35,7 @@ public final class QueryUtils {
     private QueryUtils() {
     }
 
-    public static List<News> requestNewsData(String requestUrl){
+    static List<News> requestNewsData(String requestUrl){
         //TODO Disable this (only here for testing purposes)
 //        try {
 //            Thread.sleep(2000);
@@ -129,6 +129,7 @@ public final class QueryUtils {
             //Extract “response” JSONObject
             JSONObject responseJsonObject = rootJsonObject.getJSONObject("response");
 
+            //Check Guardian API JSON status
             String jsonStatus = responseJsonObject.getString("status");
             if(!jsonStatus.equals("ok")){
                 Log.d(TAG, "extractNews status: " + jsonStatus);
@@ -157,13 +158,12 @@ public final class QueryUtils {
                 //Get “fields” JSONObject
                 JSONObject fieldsJsonObject = newsJsonObject.getJSONObject("fields");
 
-                //Get thumbnail
+                //Get the optional thumbnail
                 String thumbnailUrl = null;
                 try {
                     thumbnailUrl = fieldsJsonObject.getString("thumbnail");
-                } catch (JSONException e){
-                    Log.d(TAG, "extractNews: " + e.getMessage());
-                    continue;
+                } catch (JSONException e) {
+                    Log.d(TAG, "Get thumbnail: " + e);
                 }
 
                 //Get body text
@@ -174,7 +174,6 @@ public final class QueryUtils {
 
                 //Create News java object
                 //Add news to list of news
-                //TODO FIX THIS !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
                 news.add(new News(webTitle, sectionName, webPublicationDate, webUrl, thumbnailUrl, byline, bodyText));
             }
 
@@ -182,7 +181,7 @@ public final class QueryUtils {
             // If an error is thrown when executing any of the above statements in the "try" block,
             // catch the exception here, so the app doesn't crash. Print a log message
             // with the message from the exception.
-            Log.e("QueryUtils", "Problem parsing the news JSON results", e);
+            Log.e(TAG, "Problem parsing the news JSON results: ", e);
         }
 
         // Return the list of news

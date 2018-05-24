@@ -1,9 +1,6 @@
 package com.example.ccojo.udacitynews;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -13,12 +10,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.koushikdutta.ion.Ion;
 
-import java.io.IOException;
-import java.net.URL;
-import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -53,7 +46,23 @@ public class NewsAdapter extends ArrayAdapter<News> {
 
         TextView dateTV = convertView.findViewById(R.id.date);
         TextView timeTV = convertView.findViewById(R.id.time);
+        TextView newsTitle = convertView.findViewById(R.id.webtitle);
+        TextView newsBody = convertView.findViewById(R.id.body);
+        TextView byline = convertView.findViewById(R.id.byline);
+        TextView section = convertView.findViewById(R.id.section);
         ImageView thumbnailView = convertView.findViewById(R.id.thumbnail);
+
+        //set the news article title
+        newsTitle.setText(currentNews.getWebTitle());
+
+        //set the news article body
+        newsBody.setText(currentNews.getBodyText());
+
+        //set the byline
+        byline.setText(currentNews.getByline());
+
+        //set the section name
+        section.setText(currentNews.getSectionName());
 
         //set date and time
         String currentNewsDateTime = currentNews.getWebPublicationDate();
@@ -61,9 +70,8 @@ public class NewsAdapter extends ArrayAdapter<News> {
         setTime(timeTV, dt);
         setDate(dateTV, dt);
 
-        /*
         String dateTimeString = "2018-05-22T21:45:45Z";
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
         //DateFormat df = new SimpleDateFormat("MM-dd-yyyy");
         Date date;
         try {
@@ -73,25 +81,28 @@ public class NewsAdapter extends ArrayAdapter<News> {
         } catch (ParseException e) {
             e.printStackTrace();
         }
-        */
 
-        Ion.with(thumbnailView)
-                .placeholder(R.drawable.image_placeholder)
-                .error(R.drawable.stop)
-                .animateLoad(R.anim.spin_anim)
-                .animateIn(R.anim.fade_anim)
-                .load(currentNews.getThumbnailUrl());
+        if(currentNews.getThumbnailUrl() != null){
+            Ion.with(thumbnailView)
+                    .placeholder(null)
+                    .error(null)
+                    .animateLoad(R.anim.spin_anim)
+                    .animateIn(R.anim.fade_anim)
+                    .load(currentNews.getThumbnailUrl());
+        } else {
+            thumbnailView.setImageResource(R.drawable.image_placeholder);
+        }
 
         return convertView;
     }
 
-    public void setDate(TextView view, Date dt){
+    private void setDate(TextView view, Date dt){
         SimpleDateFormat formatter = new SimpleDateFormat(E_DD_MMM_YYYY, Locale.getDefault());
         String date = formatter.format(dt);
         view.setText(date);
     }
 
-    public void setTime(TextView view, Date dt){
+    private void setTime(TextView view, Date dt){
         SimpleDateFormat formatter = new SimpleDateFormat(HH_MM_SS_A, Locale.getDefault());
         String time = formatter.format(dt);
         view.setText(time);
