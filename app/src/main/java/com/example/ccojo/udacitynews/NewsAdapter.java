@@ -58,39 +58,39 @@ public class NewsAdapter extends ArrayAdapter<News> {
         //set the news article body
         newsBody.setText(currentNews.getBodyText());
 
-        //set the byline
-        byline.setText(currentNews.getByline());
-
         //set the section name
         section.setText(currentNews.getSectionName());
 
-        //set date and time
-        String currentNewsDateTime = currentNews.getWebPublicationDate();
-        Date dt = new Date();
-        setTime(timeTV, dt);
-        setDate(dateTV, dt);
+        //set the author name
+        if(currentNews.getByline() != null){
+            byline.setText(currentNews.getByline());
+        } else {
+            byline.setVisibility(View.GONE);
+        }
 
-        String dateTimeString = "2018-05-22T21:45:45Z";
+        //set date and time
+        String dateTimeString = currentNews.getWebPublicationDate();
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
-        //DateFormat df = new SimpleDateFormat("MM-dd-yyyy");
         Date date;
         try {
             date = sdf.parse(dateTimeString);
-            String newDateString = sdf.format(date);
-            Log.d(TAG, "SIMPLE DATE FORMAT: " + newDateString);
+            setTime(timeTV, date);
+            setDate(dateTV, date);
         } catch (ParseException e) {
             e.printStackTrace();
         }
 
         if(currentNews.getThumbnailUrl() != null){
+            thumbnailView.setVisibility(View.VISIBLE);
             Ion.with(thumbnailView)
                     .placeholder(null)
                     .error(null)
-                    .animateLoad(R.anim.spin_anim)
+                    .animateLoad(null)
                     .animateIn(R.anim.fade_anim)
                     .load(currentNews.getThumbnailUrl());
         } else {
-            thumbnailView.setImageResource(R.drawable.image_placeholder);
+            //thumbnailView.setImageResource(R.drawable.image_placeholder);
+            thumbnailView.setVisibility(View.GONE);
         }
 
         return convertView;

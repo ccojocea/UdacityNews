@@ -36,14 +36,10 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
      */
     //private static final String SHOW_FIELDS = "&show-fields=all";
     private static final String SHOW_FIELDS = "&show-fields=bodyText%2Cthumbnail%2Cbyline";
+    private static final String SHOW_TAGS = "&show-tags=contributor";
     private static final String API_URL = "http://content.guardianapis.com/search?";
     private static final String API_KEY = "ca842212-fe7c-4a30-b602-ce111cb86204";
     private static final String PRE_API_KEY = "&api-key=";
-    private static final String NEWS_URL = "section=news";
-    private static final String OPINION_URL = "section=opinion";
-    private static final String SPORT_URL = "section=sport";
-    private static final String CULTURE_URL = "section=culture";
-    private static final String LIFESTYLE_URL = "section=lifeandstyle";
     private static final String FROM_DATE = "&from-date=";
     private static final String TO_DATE = "&to-date=";
     private static final String ORDER_BY = "&order-by=newest";
@@ -54,9 +50,7 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
 
     private ConnectivityManager cm;
 
-    /**
-     * Constant value for the news loader ID.
-     */
+    /** Constant value for the news loader ID. */
     private static final int LOADER_ID = 1;
 
     /** Adapter for the list of news */
@@ -71,15 +65,22 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //TODO FIX DATE
-        //build current date as String to pass in the url
+        /**build current date as String to pass in the url
         Calendar calendar = Calendar.getInstance();
         String cDay = String.valueOf(calendar.get(Calendar.DAY_OF_MONTH));
         String cMonth = String.valueOf(calendar.get(Calendar.MONTH) + 1);
         String cYear = String.valueOf(calendar.get(Calendar.YEAR));
         String currentDay = cYear + "-" + cMonth + "-" + cDay;
+         */
         //TODO get sectionURL value from MainActivity and dynamically assign it here
-        String sectionURL = NEWS_URL;
-        queryUrl = API_URL + sectionURL + PAGE_SIZE + pageSize + SHOW_FIELDS + ORDER_BY + PRE_API_KEY + API_KEY;
+        String sectionURL = "";
+        //Check extra bundle
+        Bundle extras = getIntent().getExtras();
+        if (extras != null){
+            sectionURL = extras.getString(MainActivity.SECTION);
+        }
+        queryUrl = API_URL + sectionURL + SHOW_TAGS + PAGE_SIZE + pageSize + SHOW_FIELDS + ORDER_BY + PRE_API_KEY + API_KEY;
+
         //TODO remove log message
         Log.d(TAG, "onCreate: " + queryUrl);
 
@@ -91,6 +92,8 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
 
         // Set the empty state TextView onto the ListView
         emptyView = findViewById(R.id.empty_list_view);
+        swipeRefreshEmpty = findViewById(R.id.swiperefresh_empty);
+        swipeRefreshList = findViewById(R.id.swiperefresh_listview);
         newsListView.setEmptyView(swipeRefreshEmpty);
 
         // Create a new {@link ArrayAdapter} of news
@@ -111,8 +114,6 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
         });
 
         //call the swipe refresh methods
-        swipeRefreshEmpty = findViewById(R.id.swiperefresh_empty);
-        swipeRefreshList = findViewById(R.id.swiperefresh_listview);
         onCreateSwipeToRefresh(swipeRefreshList);
         onCreateSwipeToRefresh(swipeRefreshEmpty);
 

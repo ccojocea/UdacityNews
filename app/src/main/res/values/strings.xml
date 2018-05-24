@@ -1,7 +1,11 @@
 <resources>
-    <string name="app_name">Udacity News</string>
-
+    <string name="app_name">The Guardian News</string>
     <string name="no_news">No news found.</string>
-    <string name="no_internet">No internet connection</string>
-    <string name="no_internet_refresh">No internet to refresh</string>
+    <string name="no_internet">No internet connection. \nSwipe down to refresh.</string>
+    <string name="no_internet_refresh">No internet to refresh.</string>
+    <string name="section_news">News</string>
+    <string name="section_film">Film</string>
+    <string name="section_sport">Sport</string>
+    <string name="section_culture">Culture</string>
+    <string name="section_lifestyle">Lifestyle</string>
 </resources>

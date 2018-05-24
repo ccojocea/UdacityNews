@@ -2,7 +2,17 @@
 <resources>
     <dimen name="padding">16dp</dimen>
     <dimen name="padding_s">8dp</dimen>
+    <dimen name="padding_xl">32dp</dimen>
     <dimen name="margin">16dp</dimen>
     <dimen name="margin_s">8dp</dimen>
+    <dimen name="margin_xl">32dp</dimen>
+    <dimen name="font_size_xs">10sp</dimen>
+    <dimen name="font_size_s">12sp</dimen>
+    <dimen name="font_size">16sp</dimen>
+    <dimen name="font_size_l">20sp</dimen>
+    <dimen name="font_size_xl">24sp</dimen>
     <dimen name="size">48dp</dimen>
+    <dimen name="size_w">150dp</dimen>
+    <dimen name="size_h">90dp</dimen>
+    <dimen name="main_menu_icon">48dp</dimen>
 </resources>

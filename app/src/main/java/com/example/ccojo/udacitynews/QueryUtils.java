@@ -143,6 +143,12 @@ public final class QueryUtils {
                 //Get news JSONObject at position i
                 JSONObject newsJsonObject = resultsJsonArray.getJSONObject(i);
 
+                //Get type
+                String type = newsJsonObject.getString("type");
+                if(!type.equals("article")){
+                    continue;
+                }
+
                 //Get webTitle
                 String webTitle = newsJsonObject.getString("webTitle");
 
@@ -169,8 +175,14 @@ public final class QueryUtils {
                 //Get body text
                 String bodyText = fieldsJsonObject.getString("bodyText");
 
+                String byline = null;
                 //Get byline
-                String byline = fieldsJsonObject.getString("byline");
+                try {
+                    byline = fieldsJsonObject.getString("byline");
+                } catch (JSONException e){
+                    Log.e(TAG, "extractNews: ", e);
+                }
+
 
                 //Create News java object
                 //Add news to list of news

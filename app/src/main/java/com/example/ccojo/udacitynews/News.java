@@ -10,8 +10,8 @@ class News {
     private String webPublicationDate;
     private String webUrl;
     private String thumbnailUrl;
-    private String byline;
     private String bodyText;
+    private String byline;
 
     News(String webTitle, String sectionName, String webPublicationDate, String webUrl, String thumbnailUrl, String byline, String bodyText) {
         this.webTitle = webTitle;
@@ -19,8 +19,8 @@ class News {
         this.webPublicationDate = webPublicationDate;
         this.webUrl = webUrl;
         this.thumbnailUrl = thumbnailUrl;
-        this.byline = byline;
         this.bodyText = bodyText;
+        this.byline = byline;
     }
 
     String getWebTitle() {
@@ -29,6 +29,10 @@ class News {
 
     String getSectionName() {
         return sectionName;
+    }
+
+    public String getByline() {
+        return byline;
     }
 
     String getWebPublicationDate() {
@@ -41,10 +45,6 @@ class News {
 
     String getThumbnailUrl() {
         return thumbnailUrl;
-    }
-
-    String getByline() {
-        return byline;
     }
 
     String getBodyText() {
