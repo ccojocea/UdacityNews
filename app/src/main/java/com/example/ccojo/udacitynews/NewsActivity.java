@@ -20,32 +20,32 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by ccojo on 5/23/2018.
  */
 
 public class NewsActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<List<News>>, SwipeRefreshLayout.OnRefreshListener{
+    /** Tag for log messages */
     private static final String TAG = NewsActivity.class.getName();
 
     /**
      * Static variables/constants related to the query
+     * The ones commented out are to be used in the following version of the app
      */
     //private static final String SHOW_FIELDS = "&show-fields=all";
-    private static final String SHOW_FIELDS = "&show-fields=bodyText%2Cthumbnail%2Cbyline";
-    private static final String SHOW_TAGS = "&show-tags=contributor";
-    private static final String API_URL = "http://content.guardianapis.com/search?";
-    private static final String API_KEY = "ca842212-fe7c-4a30-b602-ce111cb86204";
-    private static final String PRE_API_KEY = "&api-key=";
-    private static final String FROM_DATE = "&from-date=";
-    private static final String TO_DATE = "&to-date=";
-    private static final String ORDER_BY = "&order-by=newest";
-    private static final String PAGE_SIZE = "&page-size=";
+    //private static final String FROM_DATE = "&from-date="; //NON-NLS
+    //private static final String TO_DATE = "&to-date="; //NON-NLS
+    private static final String SHOW_FIELDS = "&show-fields=bodyText%2Cthumbnail%2Cbyline"; //NON-NLS
+    private static final String SHOW_TAGS = "&show-tags=contributor"; //NON-NLS
+    private static final String API_URL = "http://content.guardianapis.com/search?"; //NON-NLS
+    private static final String API_KEY = "ca842212-fe7c-4a30-b602-ce111cb86204"; //NON-NLS
+    private static final String PRE_API_KEY = "&api-key="; //NON-NLS
+    private static final String ORDER_BY = "&order-by=newest"; //NON-NLS
+    private static final String PAGE_SIZE = "&page-size="; //NON-NLS
     //default page size
-    private static int pageSize = 25;
+    private static final int PAGESIZE = 25;
     private static String queryUrl;
 
     private ConnectivityManager cm;
@@ -64,25 +64,23 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        //TODO FIX DATE
         /**build current date as String to pass in the url
-        Calendar calendar = Calendar.getInstance();
-        String cDay = String.valueOf(calendar.get(Calendar.DAY_OF_MONTH));
-        String cMonth = String.valueOf(calendar.get(Calendar.MONTH) + 1);
-        String cYear = String.valueOf(calendar.get(Calendar.YEAR));
-        String currentDay = cYear + "-" + cMonth + "-" + cDay;
+         Calendar calendar = Calendar.getInstance();
+         String cDay = String.valueOf(calendar.get(Calendar.DAY_OF_MONTH));
+         String cMonth = String.valueOf(calendar.get(Calendar.MONTH) + 1);
+         String cYear = String.valueOf(calendar.get(Calendar.YEAR));
+         String currentDay = cYear + "-" + cMonth + "-" + cDay;
          */
-        //TODO get sectionURL value from MainActivity and dynamically assign it here
+
+        //Check extras bundle to get the section to be displayed
         String sectionURL = "";
-        //Check extra bundle
         Bundle extras = getIntent().getExtras();
         if (extras != null){
             sectionURL = extras.getString(MainActivity.SECTION);
         }
-        queryUrl = API_URL + sectionURL + SHOW_TAGS + PAGE_SIZE + pageSize + SHOW_FIELDS + ORDER_BY + PRE_API_KEY + API_KEY;
+        queryUrl = API_URL + sectionURL + SHOW_TAGS + PAGE_SIZE + PAGESIZE + SHOW_FIELDS + ORDER_BY + PRE_API_KEY + API_KEY;
 
-        //TODO remove log message
-        Log.d(TAG, "onCreate: " + queryUrl);
+        Log.d(TAG, "onCreate: " + queryUrl); //NON-NLS
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news);
@@ -119,7 +117,7 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
 
         //Connection stuff following
         cm = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        NetworkInfo activeNetwork = cm != null ? cm.getActiveNetworkInfo() : null;
         boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
 
         loadingIndicator = findViewById(R.id.loading_indicator);
@@ -150,7 +148,7 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public void onRefresh() {
         cm = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
-        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        NetworkInfo activeNetwork = cm != null ? cm.getActiveNetworkInfo() : null;
         boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
 
         if(isConnected){

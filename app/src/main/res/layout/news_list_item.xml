@@ -34,7 +34,7 @@
 
         <TextView
             android:id="@+id/time"
-            android:layout_toRightOf="@id/date"
+            android:layout_toEndOf="@id/date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="@dimen/font_size_xs"
@@ -46,7 +46,8 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:textSize="@dimen/font_size_xs"
-            tools:text="Section: News"/>
+            tools:text="Section: News"
+            tools:ignore="RelativeOverlap" />
 
     </RelativeLayout>
 
@@ -72,8 +73,7 @@
             android:layout_width="@dimen/size_w"
             android:layout_height="@dimen/size_h"
             android:layout_marginStart="@dimen/margin_s"
-            android:layout_gravity="end"
-            tools:src="@drawable/image_placeholder"/>
+            android:layout_gravity="end" />
 
     </LinearLayout>
 

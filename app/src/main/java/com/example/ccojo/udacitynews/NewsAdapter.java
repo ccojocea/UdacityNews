@@ -3,7 +3,6 @@ package com.example.ccojo.udacitynews;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,13 +21,13 @@ import java.util.Locale;
  * Created by ccojo on 5/23/2018.
  */
 
-public class NewsAdapter extends ArrayAdapter<News> {
-
-    private static final String E_DD_MMM_YYYY = "E dd, MMM, yyyy";
-    private static final String HH_MM_SS_A = "HH:mm:ss a";
-    private static final String OF = " of ";
-
+class NewsAdapter extends ArrayAdapter<News> {
+    /** Tag for log messages */
     private static final String TAG = NewsAdapter.class.getSimpleName();
+
+    private static final String E_DD_MMM_YYYY = "E dd, MMM, yyyy"; //NON-NLS
+    private static final String HH_MM_SS_A = "HH:mm:ss a"; //NON-NLS
+    private static final String YYYY_MM_DD_T_HH_MM_SS_Z = "yyyy-MM-dd'T'HH:mm:ss'Z'"; //NON-NLS
 
     NewsAdapter(@NonNull Context context, List<News> news) {
         super(context, 0, news);
@@ -53,24 +52,26 @@ public class NewsAdapter extends ArrayAdapter<News> {
         ImageView thumbnailView = convertView.findViewById(R.id.thumbnail);
 
         //set the news article title
-        newsTitle.setText(currentNews.getWebTitle());
+        newsTitle.setText(currentNews != null ? currentNews.getWebTitle() : getContext().getString(R.string.no_title));
 
         //set the news article body
-        newsBody.setText(currentNews.getBodyText());
+        newsBody.setText(currentNews != null ? currentNews.getBodyText() : getContext().getString(R.string.no_body));
 
         //set the section name
-        section.setText(currentNews.getSectionName());
+        section.setText(currentNews != null ? currentNews.getSectionName() : getContext().getString(R.string.no_section));
 
         //set the author name
-        if(currentNews.getByline() != null){
-            byline.setText(currentNews.getByline());
-        } else {
-            byline.setVisibility(View.GONE);
+        if (currentNews != null) {
+            if(currentNews.getByline() != null){
+                byline.setText(currentNews.getByline());
+            } else {
+                byline.setVisibility(View.GONE);
+            }
         }
 
         //set date and time
-        String dateTimeString = currentNews.getWebPublicationDate();
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'");
+        String dateTimeString = currentNews != null ? currentNews.getWebPublicationDate() : null;
+        SimpleDateFormat sdf = new SimpleDateFormat(YYYY_MM_DD_T_HH_MM_SS_Z, Locale.getDefault());
         Date date;
         try {
             date = sdf.parse(dateTimeString);
@@ -80,17 +81,18 @@ public class NewsAdapter extends ArrayAdapter<News> {
             e.printStackTrace();
         }
 
-        if(currentNews.getThumbnailUrl() != null){
-            thumbnailView.setVisibility(View.VISIBLE);
-            Ion.with(thumbnailView)
-                    .placeholder(null)
-                    .error(null)
-                    .animateLoad(null)
-                    .animateIn(R.anim.fade_anim)
-                    .load(currentNews.getThumbnailUrl());
-        } else {
-            //thumbnailView.setImageResource(R.drawable.image_placeholder);
-            thumbnailView.setVisibility(View.GONE);
+        if (currentNews != null) {
+            if(currentNews.getThumbnailUrl() != null){
+                thumbnailView.setVisibility(View.VISIBLE);
+                Ion.with(thumbnailView)
+                        .placeholder(null)
+                        .error(null)
+                        .animateLoad(null)
+                        .animateIn(R.anim.fade_anim)
+                        .load(currentNews.getThumbnailUrl());
+            } else {
+                thumbnailView.setVisibility(View.GONE);
+            }
         }
 
         return convertView;

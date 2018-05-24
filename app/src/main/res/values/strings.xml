@@ -8,4 +8,7 @@
     <string name="section_sport">Sport</string>
     <string name="section_culture">Culture</string>
     <string name="section_lifestyle">Lifestyle</string>
+    <string name="no_title">No article title found.</string>
+    <string name="no_body">No article body found.</string>
+    <string name="no_section">No section name found.</string>
 </resources>
