@@ -41,13 +41,6 @@ final class QueryUtils {
     private static final String OK = "ok"; //NON-NLS
     private static final String WEB_PUBLICATION_DATE = "webPublicationDate"; //NON-NLS
 
-
-
-
-
-
-
-
     /**
      * Create a private constructor because no one should ever create a {@link QueryUtils} object.
      * This class is only meant to hold static variables and methods, which can be accessed
@@ -57,12 +50,6 @@ final class QueryUtils {
     }
 
     static List<News> requestNewsData(String requestUrl){
-        //TODO Disable this (only here for testing purposes)
-//        try {
-//            Thread.sleep(2000);
-//        } catch (InterruptedException e) {
-//            e.printStackTrace();
-//        }
 
         if(requestUrl == null || requestUrl.isEmpty()){
             return null;
@@ -204,7 +191,6 @@ final class QueryUtils {
                     Log.e(TAG, "extractNews: ", e); //NON-NLS
                 }
 
-
                 //Create News java object
                 //Add news to list of news
                 news.add(new News(webTitle, sectionName, webPublicationDate, webUrl, thumbnailUrl, byline, bodyText));
@@ -233,5 +219,4 @@ final class QueryUtils {
 
         return url;
     }
-
 }
