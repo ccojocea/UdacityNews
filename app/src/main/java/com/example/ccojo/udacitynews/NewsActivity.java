@@ -4,22 +4,24 @@ import android.app.LoaderManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.graphics.PorterDuff;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,29 +38,20 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
     /**
      * Static variables/constants related to the query
      */
-    //private static final String SHOW_FIELDS = "&show-fields=all";
-    private static final String FROM_DATE = "&from-date="; //NON-NLS
-    private static final String TO_DATE = "&to-date="; //NON-NLS
-    private static final String SHOW_FIELDS = "&show-fields=bodyText%2Cthumbnail%2Cbyline"; //NON-NLS
-    private static final String SHOW_TAGS = "&show-tags=contributor"; //NON-NLS
-    private static final String API_URL = "http://content.guardianapis.com/search?"; //NON-NLS
-    private static final String PRE_API_KEY = "&api-key="; //NON-NLS
-    private static final String ORDER_BY = "&order-by=newest"; //NON-NLS
-    private static final String PAGE_SIZE = "&page-size="; //NON-NLS
-
-    //TODO REMOVE OR USE THIS CODE
-    /**
-     * build current date as String to pass in the url
-     * Calendar calendar = Calendar.getInstance();
-     * String cDay = String.valueOf(calendar.get(Calendar.DAY_OF_MONTH));
-     * String cMonth = String.valueOf(calendar.get(Calendar.MONTH) + 1);
-     * String cYear = String.valueOf(calendar.get(Calendar.YEAR));
-     * String currentDay = cYear + "-" + cMonth + "-" + cDay;
-     */
-
-    //default page size
-    private static final int PAGESIZE = 25;
-    private static String queryUrl;
+    private static final String GUARDIAN_API_URL = "http://content.guardianapis.com/search"; //NON-NLS
+    private static final String FROM_DATE = "from-date"; //NON-NLS
+    private static final String TO_DATE = "to-date"; //NON-NLS
+    private static final String SHOW_FIELDS = "show-fields"; //NON-NLS
+    private static final String SHOW_THUMB_FIELDS_VALUE = "bodyText,thumbnail,byline"; //NON-NLS
+    private static final String SHOW_NO_THUMB_FIELDS_VALUE = "bodyText,byline"; //NON-NLS
+    private static final String SHOW_TAGS = "show-tags"; //NON-NLS
+    private static final String SHOW_TAGS_VALUE = "contributor"; //NON-NLS
+    private static final String PRE_API_KEY = "api-key"; //NON-NLS
+    private static final String ORDER_BY = "order-by"; //NON-NLS
+    private static final String PAGE_SIZE = "page-size"; //NON-NLS
+    private static final String SECTION = "section"; //NON-NLS
+    private static final String DEFAULT_SECTION_VALUE = "news"; //NON-NLS
+    private static String sectionValue = DEFAULT_SECTION_VALUE;
 
     private ConnectivityManager cm;
 
@@ -83,14 +76,10 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         //Check extras bundle to get the section to be displayed
-        String sectionURL = "";
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
-            sectionURL = extras.getString(MainActivity.SECTION);
+            sectionValue = extras.getString(MainActivity.SECTION);
         }
-        queryUrl = API_URL + sectionURL + SHOW_TAGS + PAGE_SIZE + PAGESIZE + SHOW_FIELDS + ORDER_BY + PRE_API_KEY + BuildConfig.GUARDIAN_NEWS_API_KEY;
-
-        Log.d(TAG, "onCreate: " + queryUrl); //NON-NLS
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_news);
@@ -183,7 +172,35 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public Loader<List<News>> onCreateLoader(int id, Bundle args) {
-        return new NewsLoader(NewsActivity.this, queryUrl);
+
+        SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+        String itemsPerPage = sharedPrefs.getString(getString(R.string.settings_items_per_page_key), getString(R.string.settings_items_per_page_default));
+        String orderBy = sharedPrefs.getString(getString(R.string.settings_order_by_key), getString(R.string.settings_order_by_default));
+        boolean showImages = sharedPrefs.getBoolean(getString(R.string.settings_thumbnails_key), true);
+
+        // parse breaks apart the URI string that's passed into its parameter
+        Uri baseUri = Uri.parse(GUARDIAN_API_URL);
+
+        // buildUpon prepares the baseUri that we just parsed so we can add query parameters to it
+        Uri.Builder uriBuilder = baseUri.buildUpon();
+
+        // Append query parameter and its value.
+        uriBuilder.appendQueryParameter(SECTION, sectionValue);
+        uriBuilder.appendQueryParameter(SHOW_TAGS, SHOW_TAGS_VALUE);
+        uriBuilder.appendQueryParameter(PAGE_SIZE, itemsPerPage);
+        if(showImages) {
+            uriBuilder.appendQueryParameter(SHOW_FIELDS, SHOW_THUMB_FIELDS_VALUE);
+        } else {
+            uriBuilder.appendQueryParameter(SHOW_FIELDS, SHOW_NO_THUMB_FIELDS_VALUE);
+        }
+        uriBuilder.appendQueryParameter(ORDER_BY, orderBy);
+        uriBuilder.appendQueryParameter(PRE_API_KEY, BuildConfig.GUARDIAN_NEWS_API_KEY);
+
+        Log.d(TAG, "onCreateLoader uriBuild: " + uriBuilder.toString()); //NON-NLS
+
+        // Return the completed uri
+        return new NewsLoader(NewsActivity.this, uriBuilder.toString());
     }
 
     @Override
@@ -211,11 +228,29 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
         }
     }
 
-
     @Override
     public void onLoaderReset(Loader<List<News>> loader) {
         // Loader reset, clear out our existing data.
         mAdapter.clear();
+    }
+
+    @Override
+    // Initialises the contents of the Activity's options menu
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the Options menu specified in XML
+        getMenuInflater().inflate(R.menu.main, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.action_settings) {
+            Intent settingsIntent = new Intent (this, SettingsActivity.class);
+            startActivity(settingsIntent);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
 

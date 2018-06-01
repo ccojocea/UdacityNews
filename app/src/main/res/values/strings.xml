@@ -11,4 +11,34 @@
     <string name="no_title">No article title found.</string>
     <string name="no_body">No article body found.</string>
     <string name="no_section">No section name found.</string>
+
+    // Preference activity strings
+    <string name="settings_menu_item">Settings</string>
+    <string name="settings_title">News Settings</string>
+
+    // Order by strings
+    <string name="settings_order_by_label">Order By</string>
+    <string name="settings_order_by_key">order_by</string>
+    <string name="settings_order_by_default">@string/settings_order_by_newest_value</string>
+    <string name="settings_order_by_newest_label">Newest</string>
+    <string name="settings_order_by_newest_value">newest</string>
+    <string name="settings_order_by_oldest_label">Oldest</string>
+    <string name="settings_order_by_oldest_value">oldest</string>
+    <string name="settings_order_by_relevance_label">Relevance</string>
+    <string name="settings_order_by_relevance_value">relevance</string>
+
+    // Items per page strings
+    <string name="settings_items_per_page_label">Articles per page</string>
+    <string name="settings_items_per_page_key" translatable="false">items_per_page</string>
+    <string name="settings_items_per_page_default" translatable="false">10</string>
+
+    // Images strings
+    <string name="settings_thumbnails_label">Display article images</string>
+    <string name="settings_thumbnails_key">thumbnails</string>
+
+    // Toast strings
+    <string name="toast_order_by">Selecting Order By:</string>
+    <string name="toast_no_images">might result in no images available for some articles</string>
+    <string name="toast_at_least_items_per_page">Please select at least 5 items per page.</string>
+    <string name="toast_at_most_items_per_page">Please select at most 100 items per page.</string>
 </resources>

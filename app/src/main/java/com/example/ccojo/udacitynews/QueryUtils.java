@@ -42,7 +42,7 @@ final class QueryUtils {
     private static final String RESPONSE = "response"; //NON-NLS
     private static final String OK = "ok"; //NON-NLS
     private static final String WEB_PUBLICATION_DATE = "webPublicationDate"; //NON-NLS
-    private static final String GET_REQUEST_METHOD = "GET";
+    private static final String GET_REQUEST_METHOD = "GET"; //NON-NLS
     private static final int READ_TIMEOUT = 10000;
     private static final int CONNECT_TIMEOUT = 15000;
     private static final int OK_RESPONSE_CODE = 200;
@@ -175,22 +175,29 @@ final class QueryUtils {
                 //Get webPublicationDate
                 String webPublicationDate = newsJsonObject.optString(WEB_PUBLICATION_DATE);
 
-                //Get “fields” JSONObject
-                JSONObject fieldsJsonObject = newsJsonObject.getJSONObject(FIELDS);
-
-                //Get the optional thumbnail
+                //Get fields JSONObject - byline, body and thumbnail
                 String thumbnailUrl = null;
+                String bodyText = "";
+                String byline = "";
                 try {
-                    thumbnailUrl = fieldsJsonObject.getString(THUMBNAIL);
+                    //Get “fields” JSONObject
+                    JSONObject fieldsJsonObject = newsJsonObject.getJSONObject(FIELDS);
+
+                    //Get the optional thumbnail
+                    try {
+                        thumbnailUrl = fieldsJsonObject.getString(THUMBNAIL);
+                    } catch (JSONException e) {
+                        Log.d(TAG, "Get thumbnail: " + e); //NON-NLS
+                    }
+
+                    //Get body text
+                    bodyText = fieldsJsonObject.optString(BODY_TEXT);
+
+                    //Get byline
+                    byline = fieldsJsonObject.optString(BYLINE);
                 } catch (JSONException e) {
-                    Log.d(TAG, "Get thumbnail: " + e); //NON-NLS
+                    Log.e(TAG, "Problem getting the \"fields\" JSONObject ", e); //NON-NLS
                 }
-
-                //Get body text
-                String bodyText = fieldsJsonObject.optString(BODY_TEXT);
-
-                //Get byline
-                String byline = fieldsJsonObject.optString(BYLINE);
 
                 //Create News java object
                 //Add news to list of news

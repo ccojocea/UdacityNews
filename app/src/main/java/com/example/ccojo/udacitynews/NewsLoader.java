@@ -1,12 +1,11 @@
 package com.example.ccojo.udacitynews;
 
-/**
- * Created by ccojo on 5/23/2018.
+/*
+  Created by ccojo on 5/23/2018.
  */
 
 import android.content.AsyncTaskLoader;
 import android.content.Context;
-import android.nfc.Tag;
 
 import java.util.List;
 
@@ -15,9 +14,6 @@ import java.util.List;
  * network request to the given URL.
  */
 class NewsLoader extends AsyncTaskLoader<List<News>> {
-
-    // Tag for log messages
-    private static final String TAG = NewsLoader.class.getSimpleName();
 
     // Query URL
     private String mUrl;

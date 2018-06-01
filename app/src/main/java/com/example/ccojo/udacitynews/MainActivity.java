@@ -9,12 +9,11 @@ import android.widget.LinearLayout;
 public class MainActivity extends AppCompatActivity {
 
     // Strings used in the URL
-    private static final String NEWS_URL = "section=world"; //NON-NLS
-    private static final String FILM_URL = "section=film"; //NON-NLS
-    private static final String SPORT_URL = "section=sport"; //NON-NLS
-    private static final String CULTURE_URL = "section=culture"; //NON-NLS
-    private static final String LIFESTYLE_URL = "section=lifeandstyle"; //NON-NLS
-
+    private static final String NEWS_URL = "world"; //NON-NLS
+    private static final String FILM_URL = "film"; //NON-NLS
+    private static final String SPORT_URL = "sport"; //NON-NLS
+    private static final String CULTURE_URL = "culture"; //NON-NLS
+    private static final String LIFESTYLE_URL = "lifeandstyle"; //NON-NLS
     public static final String SECTION = "section"; //NON-NLS
 
     @Override
