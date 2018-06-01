@@ -40,6 +40,7 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
      */
     private static final String GUARDIAN_API_URL = "http://content.guardianapis.com/search"; //NON-NLS
     private static final String FROM_DATE = "from-date"; //NON-NLS
+    private static final String FROM_DATE_VALUE = "2018-01-01";
     private static final String TO_DATE = "to-date"; //NON-NLS
     private static final String SHOW_FIELDS = "show-fields"; //NON-NLS
     private static final String SHOW_THUMB_FIELDS_VALUE = "bodyText,thumbnail,byline"; //NON-NLS
@@ -173,8 +174,8 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public Loader<List<News>> onCreateLoader(int id, Bundle args) {
 
+        // Get preferences
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
-
         String itemsPerPage = sharedPrefs.getString(getString(R.string.settings_items_per_page_key), getString(R.string.settings_items_per_page_default));
         String orderBy = sharedPrefs.getString(getString(R.string.settings_order_by_key), getString(R.string.settings_order_by_default));
         boolean showImages = sharedPrefs.getBoolean(getString(R.string.settings_thumbnails_key), true);
@@ -195,6 +196,9 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
             uriBuilder.appendQueryParameter(SHOW_FIELDS, SHOW_NO_THUMB_FIELDS_VALUE);
         }
         uriBuilder.appendQueryParameter(ORDER_BY, orderBy);
+        if(orderBy.equals(getString(R.string.settings_order_by_relevance_value))) {
+            uriBuilder.appendQueryParameter(FROM_DATE, FROM_DATE_VALUE);            
+        }
         uriBuilder.appendQueryParameter(PRE_API_KEY, BuildConfig.GUARDIAN_NEWS_API_KEY);
 
         Log.d(TAG, "onCreateLoader uriBuild: " + uriBuilder.toString()); //NON-NLS
