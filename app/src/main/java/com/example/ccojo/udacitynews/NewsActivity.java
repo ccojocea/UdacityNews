@@ -197,7 +197,7 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
         }
         uriBuilder.appendQueryParameter(ORDER_BY, orderBy);
         if(orderBy.equals(getString(R.string.settings_order_by_relevance_value))) {
-            uriBuilder.appendQueryParameter(FROM_DATE, FROM_DATE_VALUE);            
+            uriBuilder.appendQueryParameter(FROM_DATE, FROM_DATE_VALUE);
         }
         uriBuilder.appendQueryParameter(PRE_API_KEY, BuildConfig.GUARDIAN_NEWS_API_KEY);
 
