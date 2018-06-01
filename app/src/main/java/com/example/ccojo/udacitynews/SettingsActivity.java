@@ -43,6 +43,8 @@ public class SettingsActivity extends AppCompatActivity {
             bindPreferenceSummaryToValue(itemsPerPage);
             Preference orderBy = findPreference(getString(R.string.settings_order_by_key));
             bindPreferenceSummaryToValue(orderBy);
+            Preference language = findPreference(getString(R.string.settings_language_key));
+            bindPreferenceSummaryToValue(language);
         }
 
         @Override

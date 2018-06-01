@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">The Guardian News</string>
-    <string name="no_news">No news found.</string>
+    <string name="no_news">No news found. \nTry changing the section or article language from settings.</string>
     <string name="no_internet">No internet connection. \nSwipe down to refresh.</string>
     <string name="no_internet_refresh">No internet to refresh.</string>
     <string name="section_news">News</string>
@@ -27,10 +27,21 @@
     <string name="settings_order_by_relevance_label">Relevance</string>
     <string name="settings_order_by_relevance_value">relevance</string>
 
+    // Language strings
+    <string name="settings_language_label">Language</string>
+    <string name="settings_language_key">language</string>
+    <string name="settings_language_default">@string/settings_language_english_value</string>
+    <string name="settings_language_english_label">English</string>
+    <string name="settings_language_english_value">en</string>
+    <string name="settings_language_french_label">French</string>
+    <string name="settings_language_french_value">fr</string>
+    <string name="settings_language_german_label">German</string>
+    <string name="settings_language_german_value">de</string>
+
     // Items per page strings
     <string name="settings_items_per_page_label">Articles per page</string>
     <string name="settings_items_per_page_key" translatable="false">items_per_page</string>
-    <string name="settings_items_per_page_default" translatable="false">10</string>
+    <string name="settings_items_per_page_default" translatable="false">20</string>
 
     // Images strings
     <string name="settings_thumbnails_label">Display article images</string>

@@ -41,7 +41,6 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
     private static final String GUARDIAN_API_URL = "http://content.guardianapis.com/search"; //NON-NLS
     private static final String FROM_DATE = "from-date"; //NON-NLS
     private static final String FROM_DATE_VALUE = "2018-01-01";
-    private static final String TO_DATE = "to-date"; //NON-NLS
     private static final String SHOW_FIELDS = "show-fields"; //NON-NLS
     private static final String SHOW_THUMB_FIELDS_VALUE = "bodyText,thumbnail,byline"; //NON-NLS
     private static final String SHOW_NO_THUMB_FIELDS_VALUE = "bodyText,byline"; //NON-NLS
@@ -52,6 +51,7 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
     private static final String PAGE_SIZE = "page-size"; //NON-NLS
     private static final String SECTION = "section"; //NON-NLS
     private static final String DEFAULT_SECTION_VALUE = "news"; //NON-NLS
+    private static final String LANG = "lang"; //NON-NLS
     private static String sectionValue = DEFAULT_SECTION_VALUE;
 
     private ConnectivityManager cm;
@@ -178,6 +178,7 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
         SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
         String itemsPerPage = sharedPrefs.getString(getString(R.string.settings_items_per_page_key), getString(R.string.settings_items_per_page_default));
         String orderBy = sharedPrefs.getString(getString(R.string.settings_order_by_key), getString(R.string.settings_order_by_default));
+        String language = sharedPrefs.getString(getString(R.string.settings_language_key), getString(R.string.settings_language_default));
         boolean showImages = sharedPrefs.getBoolean(getString(R.string.settings_thumbnails_key), true);
 
         // parse breaks apart the URI string that's passed into its parameter
@@ -189,6 +190,7 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
         // Append query parameter and its value.
         uriBuilder.appendQueryParameter(SECTION, sectionValue);
         uriBuilder.appendQueryParameter(SHOW_TAGS, SHOW_TAGS_VALUE);
+        uriBuilder.appendQueryParameter(LANG, language);
         uriBuilder.appendQueryParameter(PAGE_SIZE, itemsPerPage);
         if(showImages) {
             uriBuilder.appendQueryParameter(SHOW_FIELDS, SHOW_THUMB_FIELDS_VALUE);
