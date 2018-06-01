@@ -24,7 +24,9 @@ import java.util.List;
 
 final class QueryUtils {
 
-    /** Tag for the log messages */
+    /**
+     * Tag for the log messages
+     */
     private static final String TAG = QueryUtils.class.getSimpleName();
     private static final String BODY_TEXT = "bodyText"; //NON-NLS
     private static final String BYLINE = "byline"; //NON-NLS
@@ -40,6 +42,10 @@ final class QueryUtils {
     private static final String RESPONSE = "response"; //NON-NLS
     private static final String OK = "ok"; //NON-NLS
     private static final String WEB_PUBLICATION_DATE = "webPublicationDate"; //NON-NLS
+    private static final String GET_REQUEST_METHOD = "GET";
+    private static final int READ_TIMEOUT = 10000;
+    private static final int CONNECT_TIMEOUT = 15000;
+    private static final int OK_RESPONSE_CODE = 200;
 
     /**
      * Create a private constructor because no one should ever create a {@link QueryUtils} object.
@@ -49,9 +55,9 @@ final class QueryUtils {
     private QueryUtils() {
     }
 
-    static List<News> requestNewsData(String requestUrl){
+    static List<News> requestNewsData(String requestUrl) {
 
-        if(requestUrl == null || requestUrl.isEmpty()){
+        if (requestUrl == null || requestUrl.isEmpty()) {
             return null;
         }
 
@@ -67,10 +73,10 @@ final class QueryUtils {
         return extractNews(jsonString);
     }
 
-    private static String makeHttpRequest(URL url) throws IOException{
+    private static String makeHttpRequest(URL url) throws IOException {
         String jsonResponse = "";
 
-        if(url == null){
+        if (url == null) {
             return jsonResponse;
         }
 
@@ -79,37 +85,37 @@ final class QueryUtils {
 
         try {
             urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setReadTimeout(10000);
-            urlConnection.setConnectTimeout(15000);
-            urlConnection.setRequestMethod("GET"); //NON-NLS
+            urlConnection.setReadTimeout(READ_TIMEOUT);
+            urlConnection.setConnectTimeout(CONNECT_TIMEOUT);
+            urlConnection.setRequestMethod(GET_REQUEST_METHOD); //NON-NLS
             urlConnection.connect();
 
-            if(urlConnection.getResponseCode() == 200){
+            if (urlConnection.getResponseCode() == OK_RESPONSE_CODE) {
                 inputStream = urlConnection.getInputStream();
                 jsonResponse = readFromStream(inputStream);
             } else {
                 Log.e(TAG, "Url Connection Response Code: " + urlConnection.getResponseCode()); //NON-NLS
             }
-        } catch (IOException e){
+        } catch (IOException e) {
             Log.e(TAG, "Problem retrieving the news JSON results.", e); //NON-NLS
         } finally {
-            if(urlConnection != null){
+            if (urlConnection != null) {
                 urlConnection.disconnect();
             }
-            if(inputStream != null){
+            if (inputStream != null) {
                 inputStream.close();
             }
         }
         return jsonResponse;
     }
 
-    private static String readFromStream(InputStream inputStream) throws IOException{
+    private static String readFromStream(InputStream inputStream) throws IOException {
         StringBuilder sb = new StringBuilder();
-        if(inputStream != null){
+        if (inputStream != null) {
             InputStreamReader inputStreamReader = new InputStreamReader(inputStream, Charset.forName("UTF-8")); //NON-NLS
             BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
             String line = bufferedReader.readLine();
-            while(line != null){
+            while (line != null) {
                 sb.append(line);
                 line = bufferedReader.readLine();
             }
@@ -122,7 +128,7 @@ final class QueryUtils {
      * parsing a JSON response.
      */
     private static List<News> extractNews(String json) {
-        if(TextUtils.isEmpty(json)){
+        if (TextUtils.isEmpty(json)) {
             return null;
         }
 
@@ -139,7 +145,7 @@ final class QueryUtils {
 
             //Check Guardian API JSON status
             String jsonStatus = responseJsonObject.getString(STATUS);
-            if(!jsonStatus.equals(OK)){
+            if (!jsonStatus.equals(OK)) {
                 Log.d(TAG, "extractNews status: " + jsonStatus); //NON-NLS
                 return null;
             }
@@ -153,21 +159,21 @@ final class QueryUtils {
 
                 //Get type
                 String type = newsJsonObject.getString(TYPE);
-                if(!type.equals(ARTICLE)){
+                if (!type.equals(ARTICLE)) {
                     continue;
                 }
 
                 //Get webTitle
-                String webTitle = newsJsonObject.getString(WEB_TITLE);
+                String webTitle = newsJsonObject.optString(WEB_TITLE);
 
                 //Get sectionName
-                String sectionName = newsJsonObject.getString(SECTION_NAME);
+                String sectionName = newsJsonObject.optString(SECTION_NAME);
 
                 //Get webUrl
-                String webUrl = newsJsonObject.getString(WEB_URL);
+                String webUrl = newsJsonObject.optString(WEB_URL);
 
                 //Get webPublicationDate
-                String webPublicationDate = newsJsonObject.getString(WEB_PUBLICATION_DATE);
+                String webPublicationDate = newsJsonObject.optString(WEB_PUBLICATION_DATE);
 
                 //Get “fields” JSONObject
                 JSONObject fieldsJsonObject = newsJsonObject.getJSONObject(FIELDS);
@@ -181,15 +187,10 @@ final class QueryUtils {
                 }
 
                 //Get body text
-                String bodyText = fieldsJsonObject.getString(BODY_TEXT);
+                String bodyText = fieldsJsonObject.optString(BODY_TEXT);
 
-                String byline = null;
                 //Get byline
-                try {
-                    byline = fieldsJsonObject.getString(BYLINE);
-                } catch (JSONException e){
-                    Log.e(TAG, "extractNews: ", e); //NON-NLS
-                }
+                String byline = fieldsJsonObject.optString(BYLINE);
 
                 //Create News java object
                 //Add news to list of news
@@ -208,7 +209,7 @@ final class QueryUtils {
     }
 
     //return URL object from String
-    private static URL createUrl(String inputUrl){
+    private static URL createUrl(String inputUrl) {
         URL url = null;
 
         try {

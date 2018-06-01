@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:orientation="vertical"
     android:padding="@dimen/padding"
     tools:context=".NewsActivity">
 
@@ -17,7 +16,7 @@
         android:maxLines="1"
         android:textAllCaps="true"
         android:textSize="14sp"
-        tools:text="News title news titleNews title newe "/>
+        tools:text="News title" />
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -28,17 +27,17 @@
             android:id="@+id/date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/font_size_xs"
             android:layout_marginEnd="@dimen/margin_s"
-            tools:text="Sat, 29 Apr, 2018"/>
+            android:textSize="@dimen/font_size_xs"
+            tools:text="Sat, 29 Apr, 2018" />
 
         <TextView
             android:id="@+id/time"
-            android:layout_toEndOf="@id/date"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/date"
             android:textSize="@dimen/font_size_xs"
-            tools:text="08:30 AM"/>
+            tools:text="08:30 AM" />
 
         <TextView
             android:id="@+id/section"
@@ -46,16 +45,16 @@
             android:layout_height="wrap_content"
             android:layout_alignParentEnd="true"
             android:textSize="@dimen/font_size_xs"
-            tools:text="Section: News"
-            tools:ignore="RelativeOverlap" />
+            tools:ignore="RelativeOverlap"
+            tools:text="Section: News" />
 
     </RelativeLayout>
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_marginBottom="@dimen/margin_s">
+        android:layout_marginBottom="@dimen/margin_s"
+        android:orientation="horizontal">
 
         <TextView
             android:id="@+id/body"
@@ -66,14 +65,14 @@
             android:ellipsize="end"
             android:maxLines="6"
             android:textSize="@dimen/font_size_s"
-            tools:text="Long placeholder location that should wrap to more than 2 lines of text Long placeholder location that should wrap to more than 2 lines of text Long placeholder location that should wrap to more than 2 lines of text" />
+            tools:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam eget tortor in nibh varius faucibus. Ut bibendum aliquet sodales. Integer dictum nec ex eu pretium. Pellentesque lacinia iaculis massa vel eleifend. Integer ac lectus vel urna volutpat scelerisque a sed est. Nullam id eleifend mi. Proin tellus nisi, auctor sit amet laoreet id, consequat eget lacus. Nulla dui ligula, rutrum quis lacus et, fermentum pharetra magna." />
 
         <ImageView
             android:id="@+id/thumbnail"
             android:layout_width="@dimen/size_w"
             android:layout_height="@dimen/size_h"
-            android:layout_marginStart="@dimen/margin_s"
-            android:layout_gravity="end" />
+            android:layout_gravity="end"
+            android:layout_marginStart="@dimen/margin_s" />
 
     </LinearLayout>
 
@@ -81,14 +80,14 @@
         android:id="@+id/byline"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/margin_s"
         android:textAlignment="textEnd"
         android:textSize="@dimen/font_size_xs"
-        tools:text="by: author author author author author author author author author author author author author author author author"
-        android:layout_marginBottom="@dimen/margin_s"/>
+        tools:text="by: Some Random Author" />
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:background="@android:color/darker_gray"/>
+        android:background="@android:color/darker_gray" />
 
 </LinearLayout>

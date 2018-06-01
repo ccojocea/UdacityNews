@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.koushikdutta.ion.Ion;
 
 import java.text.ParseException;
@@ -22,9 +23,7 @@ import java.util.Locale;
  */
 
 class NewsAdapter extends ArrayAdapter<News> {
-    /** Tag for log messages */
     private static final String TAG = NewsAdapter.class.getSimpleName();
-
     private static final String E_DD_MMM_YYYY = "E dd, MMM, yyyy"; //NON-NLS
     private static final String HH_MM_SS_A = "HH:mm:ss a"; //NON-NLS
     private static final String YYYY_MM_DD_T_HH_MM_SS_Z = "yyyy-MM-dd'T'HH:mm:ss'Z'"; //NON-NLS
@@ -39,7 +38,7 @@ class NewsAdapter extends ArrayAdapter<News> {
 
         News currentNews = getItem(position);
 
-        if(convertView == null){
+        if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.news_list_item, parent, false);
         }
 
@@ -51,38 +50,36 @@ class NewsAdapter extends ArrayAdapter<News> {
         TextView section = convertView.findViewById(R.id.section);
         ImageView thumbnailView = convertView.findViewById(R.id.thumbnail);
 
-        //set the news article title
-        newsTitle.setText(currentNews != null ? currentNews.getWebTitle() : getContext().getString(R.string.no_title));
-
-        //set the news article body
-        newsBody.setText(currentNews != null ? currentNews.getBodyText() : getContext().getString(R.string.no_body));
-
-        //set the section name
-        section.setText(currentNews != null ? currentNews.getSectionName() : getContext().getString(R.string.no_section));
-
-        //set the author name
         if (currentNews != null) {
-            if(currentNews.getByline() != null){
+            //set the news article title
+            newsTitle.setText(!currentNews.getWebTitle().equals("") ? currentNews.getWebTitle() : getContext().getString(R.string.no_title));
+
+            //set the news article body
+            newsBody.setText(!currentNews.getBodyText().equals("") ? currentNews.getBodyText() : getContext().getString(R.string.no_body));
+
+            //set the section name
+            section.setText(!currentNews.getSectionName().equals("") ? currentNews.getSectionName() : getContext().getString(R.string.no_section));
+
+            //set the author name
+            if (!currentNews.getByline().equals("")) {
                 byline.setText(currentNews.getByline());
             } else {
                 byline.setVisibility(View.GONE);
             }
-        }
 
-        //set date and time
-        String dateTimeString = currentNews != null ? currentNews.getWebPublicationDate() : null;
-        SimpleDateFormat sdf = new SimpleDateFormat(YYYY_MM_DD_T_HH_MM_SS_Z, Locale.getDefault());
-        Date date;
-        try {
-            date = sdf.parse(dateTimeString);
-            setTime(timeTV, date);
-            setDate(dateTV, date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+            //set date and time
+            String dateTimeString = !currentNews.getWebPublicationDate().equals("") ? currentNews.getWebPublicationDate() : null;
+            SimpleDateFormat sdf = new SimpleDateFormat(YYYY_MM_DD_T_HH_MM_SS_Z, Locale.getDefault());
+            Date date;
+            try {
+                date = sdf.parse(dateTimeString);
+                setTime(timeTV, date);
+                setDate(dateTV, date);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
 
-        if (currentNews != null) {
-            if(currentNews.getThumbnailUrl() != null){
+            if (currentNews.getThumbnailUrl() != null) {
                 thumbnailView.setVisibility(View.VISIBLE);
                 Ion.with(thumbnailView)
                         .placeholder(null)
@@ -98,13 +95,13 @@ class NewsAdapter extends ArrayAdapter<News> {
         return convertView;
     }
 
-    private void setDate(TextView view, Date dt){
+    private void setDate(TextView view, Date dt) {
         SimpleDateFormat formatter = new SimpleDateFormat(E_DD_MMM_YYYY, Locale.getDefault());
         String date = formatter.format(dt);
         view.setText(date);
     }
 
-    private void setTime(TextView view, Date dt){
+    private void setTime(TextView view, Date dt) {
         SimpleDateFormat formatter = new SimpleDateFormat(HH_MM_SS_A, Locale.getDefault());
         String time = formatter.format(dt);
         view.setText(time);

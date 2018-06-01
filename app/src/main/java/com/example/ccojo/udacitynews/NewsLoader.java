@@ -6,6 +6,7 @@ package com.example.ccojo.udacitynews;
 
 import android.content.AsyncTaskLoader;
 import android.content.Context;
+import android.nfc.Tag;
 
 import java.util.List;
 
@@ -14,17 +15,18 @@ import java.util.List;
  * network request to the given URL.
  */
 class NewsLoader extends AsyncTaskLoader<List<News>> {
-    /** Tag for log messages */
+
+    // Tag for log messages
     private static final String TAG = NewsLoader.class.getSimpleName();
 
-    /** Query URL */
+    // Query URL
     private String mUrl;
 
     /**
      * Constructs a new {@link NewsLoader}.
      *
      * @param context of the activity
-     * @param url to load data from
+     * @param url     to load data from
      */
     NewsLoader(Context context, String url) {
         super(context);
@@ -41,7 +43,7 @@ class NewsLoader extends AsyncTaskLoader<List<News>> {
      */
     @Override
     public List<News> loadInBackground() {
-        if(mUrl == null){
+        if (mUrl == null) {
             return null;
         }
 
