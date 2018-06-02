@@ -34,7 +34,7 @@ class NewsAdapter extends ArrayAdapter<News> {
         ImageView thumbnailView;
     }
 
-    private static final String TAG = NewsAdapter.class.getSimpleName();
+    private static final String TAG = NewsAdapter.class.getSimpleName() + "DEBUG";
     private static final String E_DD_MMM_YYYY = "E dd, MMM, yyyy"; //NON-NLS
     private static final String HH_MM_SS_A = "HH:mm:ss a"; //NON-NLS
     private static final String YYYY_MM_DD_T_HH_MM_SS_Z = "yyyy-MM-dd'T'HH:mm:ss'Z'"; //NON-NLS

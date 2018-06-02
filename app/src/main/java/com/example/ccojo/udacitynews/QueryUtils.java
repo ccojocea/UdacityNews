@@ -27,7 +27,7 @@ final class QueryUtils {
     /**
      * Tag for the log messages
      */
-    private static final String TAG = QueryUtils.class.getSimpleName();
+    private static final String TAG = QueryUtils.class.getSimpleName() + "DEBUG";
     private static final String BODY_TEXT = "bodyText"; //NON-NLS
     private static final String BYLINE = "byline"; //NON-NLS
     private static final String THUMBNAIL = "thumbnail"; //NON-NLS

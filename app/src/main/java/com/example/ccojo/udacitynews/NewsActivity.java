@@ -33,7 +33,7 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
     /**
      * Tag for log messages
      */
-    private static final String TAG = NewsActivity.class.getName();
+    private static final String TAG = NewsActivity.class.getName() + "DEBUG";
 
     /**
      * Static variables/constants related to the query
@@ -127,8 +127,14 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
             // Initialize the loader. Pass in the int ID constant defined above and pass in null for
             // the bundle. Pass in this activity for the LoaderCallbacks parameter (which is valid
             // because this activity implements the LoaderCallbacks interface).
+
+            Log.d(TAG, "onCreate: initloader");
+
             getLoaderManager().initLoader(LOADER_ID, null, this);
         } else {
+
+            Log.d(TAG, "onCreate: no internet view");
+
             loadingIndicator.setVisibility(View.GONE);
             emptyView.setText(R.string.no_internet);
         }
@@ -147,6 +153,9 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public void onRefresh() {
+
+        Log.d(TAG, "onRefresh: ");
+
         cm = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo activeNetwork = cm != null ? cm.getActiveNetworkInfo() : null;
         boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
@@ -155,11 +164,20 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
             // Initialize the loader. Pass in the int ID constant defined above and pass in null for
             // the bundle. Pass in this activity for the LoaderCallbacks parameter (which is valid
             // because this activity implements the LoaderCallbacks interface).
-            getLoaderManager().initLoader(LOADER_ID, null, this);
+
+            if(mAdapter.isEmpty()) {
+                Log.d(TAG, "onRefresh: restartLoader");
+                getLoaderManager().restartLoader(LOADER_ID, null, this);    
+            } else {
+                Log.d(TAG, "onRefresh: initLoader");
+                getLoaderManager().initLoader(LOADER_ID, null, this);    
+            }
         } else {
             Toast.makeText(this, R.string.no_internet_refresh, Toast.LENGTH_SHORT).show();
             loadingIndicator.setVisibility(View.GONE);
             emptyView.setText(R.string.no_internet);
+
+            Log.d(TAG, "onRefresh: no internet view");
 
             if (swipeRefreshList.isRefreshing()) {
                 swipeRefreshList.setRefreshing(false);
@@ -211,19 +229,38 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public void onLoadFinished(Loader<List<News>> loader, List<News> data) {
+
+        Log.d(TAG, "onLoadFinished: ");
+
         // Clear the adapter of previous news data
         mAdapter.clear();
 
         loadingIndicator.setVisibility(View.GONE);
 
-        // If there is a valid list of {@link News}s, then add them to the adapter's
-        // data set. This will trigger the ListView to update.
-        if (data != null && !data.isEmpty()) {
-            mAdapter.addAll(data);
-        } else {
-            emptyView.setText(R.string.no_news);
-        }
+        cm = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo activeNetwork = cm != null ? cm.getActiveNetworkInfo() : null;
+        boolean isConnected = activeNetwork != null && activeNetwork.isConnectedOrConnecting();
 
+        if (isConnected) {
+
+            Log.d(TAG, "onLoadFinished: isConnected");
+
+            // If there is a valid list of {@link News}s, then add them to the adapter's
+            // data set. This will trigger the ListView to update.
+            if (data != null && !data.isEmpty()) {
+                mAdapter.addAll(data);
+            } else {
+                emptyView.setText(R.string.no_news);
+
+                Log.d(TAG, "onLoadFinished: no news view");
+            }
+        } else {
+            Toast.makeText(this, R.string.no_internet_refresh, Toast.LENGTH_SHORT).show();
+            loadingIndicator.setVisibility(View.GONE);
+            emptyView.setText(R.string.no_internet);
+
+            Log.d(TAG, "onLoadFinished: no internet view");
+        }
 
         if (swipeRefreshList.isRefreshing()) {
             swipeRefreshList.setRefreshing(false);
@@ -236,6 +273,9 @@ public class NewsActivity extends AppCompatActivity implements LoaderManager.Loa
 
     @Override
     public void onLoaderReset(Loader<List<News>> loader) {
+
+        Log.d(TAG, "onLoaderReset: ");
+
         // Loader reset, clear out our existing data.
         mAdapter.clear();
     }

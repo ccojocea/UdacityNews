@@ -15,7 +15,7 @@ public class SettingsActivity extends AppCompatActivity {
     /**
      * Tag for log messages
      */
-    private static final String TAG = SettingsActivity.class.getName();
+    private static final String TAG = SettingsActivity.class.getName() + "DEBUG";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
