@@ -12,7 +12,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.widget.Toast;
 
-public class SettingsActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener{
+public class SettingsActivity extends AppCompatActivity{
     /**
      * Tag for log messages
      */
@@ -22,9 +22,6 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
-
-        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
     }
 
     // Make sure settings are also applied and refreshed after pressing the Back button
@@ -32,11 +29,6 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
     public void onBackPressed() {
         super.onBackPressed();
         NavUtils.navigateUpFromSameTask(this);
-    }
-
-    @Override
-    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        Log.d(TAG, "onSharedPreferenceChanged ACTIVITY: ");
     }
 
     public static class NewsPreferenceFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener, SharedPreferences.OnSharedPreferenceChangeListener {
@@ -47,7 +39,7 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
 
             addPreferencesFromResource(R.xml.settings_main);
 
-            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
             preferences.registerOnSharedPreferenceChangeListener(this);
 
             // show summary under preference label
@@ -103,6 +95,8 @@ public class SettingsActivity extends AppCompatActivity implements SharedPrefere
 
         @Override
         public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+            //TODO HANDLE REFRESHING DATA IF SETTINGS WERE CHANGED
+
             Log.d(TAG, "onSharedPreferenceChanged FRAGMENT: ");
         }
     }

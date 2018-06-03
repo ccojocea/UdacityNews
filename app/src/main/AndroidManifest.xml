@@ -20,6 +20,7 @@
             </intent-filter>
         </activity>
 
+        <!--TODO Remove launchMode="singleTop" for refresh at all times, leave it in to refresh with listener-->
         <activity
             android:name=".NewsActivity"
             android:launchMode="singleTop">
