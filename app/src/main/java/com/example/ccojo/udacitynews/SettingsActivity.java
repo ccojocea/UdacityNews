@@ -9,9 +9,10 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.Toast;
 
-public class SettingsActivity extends AppCompatActivity {
+public class SettingsActivity extends AppCompatActivity implements SharedPreferences.OnSharedPreferenceChangeListener{
     /**
      * Tag for log messages
      */
@@ -21,6 +22,9 @@ public class SettingsActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
+
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        sharedPreferences.registerOnSharedPreferenceChangeListener(this);
     }
 
     // Make sure settings are also applied and refreshed after pressing the Back button
@@ -30,13 +34,21 @@ public class SettingsActivity extends AppCompatActivity {
         NavUtils.navigateUpFromSameTask(this);
     }
 
-    public static class NewsPreferenceFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener {
+    @Override
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+        Log.d(TAG, "onSharedPreferenceChanged ACTIVITY: ");
+    }
+
+    public static class NewsPreferenceFragment extends PreferenceFragment implements Preference.OnPreferenceChangeListener, SharedPreferences.OnSharedPreferenceChangeListener {
 
         @Override
         public void onCreate(@Nullable Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
 
             addPreferencesFromResource(R.xml.settings_main);
+
+            SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity().getApplicationContext());
+            preferences.registerOnSharedPreferenceChangeListener(this);
 
             // show summary under preference label
             Preference itemsPerPage = findPreference(getString(R.string.settings_items_per_page_key));
@@ -49,6 +61,9 @@ public class SettingsActivity extends AppCompatActivity {
 
         @Override
         public boolean onPreferenceChange(Preference preference, Object newValue) {
+
+            Log.d(TAG, "onPreferenceChange: ");
+            
             String stringValue = newValue.toString();
 
             if (preference.getKey().equals(getString(R.string.settings_order_by_key))) {
@@ -84,6 +99,11 @@ public class SettingsActivity extends AppCompatActivity {
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(preference.getContext());
             String preferenceString = preferences.getString(preference.getKey(), "");
             onPreferenceChange(preference, preferenceString);
+        }
+
+        @Override
+        public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
+            Log.d(TAG, "onSharedPreferenceChanged FRAGMENT: ");
         }
     }
 }

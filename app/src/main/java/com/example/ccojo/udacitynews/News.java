@@ -31,7 +31,7 @@ class News {
         return sectionName;
     }
 
-    public String getByline() {
+    String getByline() {
         return byline;
     }
 

@@ -21,7 +21,8 @@
         </activity>
 
         <activity
-            android:name=".NewsActivity">
+            android:name=".NewsActivity"
+            android:launchMode="singleTop">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.ccojo.udacitynews.MainActivity"/>
